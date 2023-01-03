@@ -12,7 +12,7 @@ unsigned long sinceLast100msLoop = 0;
 unsigned long sinceLast200msLoop = 0;
 unsigned long sinceLast1000msLoop = 0;
 unsigned long sinceLast5sLoop = 0;
-
+int randomId = 90;
 int speed = 0;
 int rpm = 0;
 
@@ -30,6 +30,7 @@ void setup() {
     Serial.println("Starting CAN failed!");
     while (1);
   }
+  delay(5000);
   Serial.println("Initialized");
 }
 
@@ -43,12 +44,12 @@ void loop() {
     while (CAN.available()) {
       data.concat(String(CAN.read(), HEX));
     }
-    Serial.print("id: 0x");
-    Serial.print(CAN.packetId(), HEX);
-    Serial.print(" DLC: ");
-    Serial.print(packetSize);
-    Serial.print("  data: ");
-    Serial.println(data);
+    //Serial.print("id: 0x");
+    //Serial.print(CAN.packetId(), HEX);
+    //Serial.print(" DLC: ");
+    //Serial.print(packetSize);
+    //Serial.print("  data: ");
+    //Serial.println(data);
       
   }
   if (currentLoop - sinceLast100msLoop > 100) {
@@ -60,10 +61,11 @@ void loop() {
     send110(); // RPM and Speed
     send230(); // TPMS
     send250(); // ECU
+    send290(); // Error messages
     send2a0(); // Engine Service 
     send300(); // Alternator light
     send360(); // Engine Temp
-    
+    sendRandom(); // Testing 
     // RPM Needle sweeper
     if (rpm >= 8000) {
       rpmForward = false;
@@ -72,10 +74,10 @@ void loop() {
       rpmForward = true;
     }
     if (rpmForward) {
-      rpm +=200;
+      rpm +=53;
     }
     else {
-      rpm = rpm - 200;
+      rpm = rpm - 53;
     }
     
     // Speed needle sweeper
@@ -91,6 +93,10 @@ void loop() {
     else {
       speed = speed - 1;
     }
+  }
+  if (currentLoop - sinceLast5sLoop > 2000) {
+    sinceLast5sLoop = currentLoop;
+    randomId = randomId+=1;
   }
 }
 void send20() { // Dont really know what this does but it was in a log
@@ -119,6 +125,7 @@ void send40() { // Airbag
     CAN.endPacket();
     Serial.println("0x40 Sent");
 }
+
 // 0x70
 // byte1 - tc status
 // 0b10101010 - "tc off" on
@@ -137,6 +144,27 @@ void send70() { // ABS
     CAN.endPacket();
     Serial.println("0x70 Sent");
 }
+
+// 0x80 
+// byte0-key position
+// byte1-lights status
+// byte2-ignition status
+// bit0-
+// bit1-
+// bit2-
+// bit3- ignition in run (makes cluster wake if 0)
+// bit4-
+// bit5-
+// bit6-
+// bit7-
+// byte3-doors status, 1 = closed 0 = open
+// bit0-driver front door
+// bit1-passenger front door
+// bit2-driver rear door
+// bit3-passenger rear door
+// bit4-hatch/trunk
+// bit5-hood
+// byte 5-cruise control status
 void send80() { // Ignition Status
     CAN.beginPacket(0x080);
     CAN.write(0x44);
@@ -189,6 +217,20 @@ void send250() {
     CAN.endPacket();
     Serial.println("0x250 Sent");
 }
+void send290() {
+    CAN.beginPacket(0x290);
+    CAN.write(0b11111111); // makes brake fluid message go away
+    CAN.write(0);
+    CAN.write(0);
+    CAN.write(0);
+    CAN.write(0b10101010); // backlight brightness
+    CAN.write(0);
+    CAN.write(0);
+    CAN.write(0);
+    CAN.endPacket();
+    Serial.println("0x290 Sent");
+}
+
 void send2a0() {
     CAN.beginPacket(0x2a0);
     CAN.write(0xFF);
@@ -227,4 +269,25 @@ void send360() {
     CAN.write(0x33);
     CAN.endPacket();
     Serial.println("0x360 Sent");
+}
+void sendRandom() {
+    int randomData[] = {random(255),random(255),random(255),random(255),random(255),random(255),random(255),random(255)};
+    CAN.beginPacket(randomId);
+    CAN.write(randomData[0]);
+    CAN.write(randomData[1]);
+    CAN.write(randomData[2]);
+    CAN.write(randomData[3]);
+    CAN.write(randomData[4]);
+    CAN.write(randomData[5]);
+    CAN.write(randomData[6]);
+    CAN.write(randomData[7]);
+    
+    CAN.endPacket();
+    Serial.print("Sending ");
+    Serial.print(randomId);
+    Serial.print("  ");
+    for(int i = 0; i < 8; i++) {
+      Serial.print(randomData[i]);
+    }
+    Serial.println();
 }
