@@ -1,7 +1,7 @@
 # Ford Focus MK3 Cluster Controller with an ESP32
-A short arduino script to control the Ford Focus MK3 Instrument Cluster {P/N:CM5T-10849-TU) with an ESP32-WROOM module with a SN65 something CAN bus tranceiver. This can also be done with a lil bit different code on an Atmega328p/whatever else with a MCP2515 CAN controller and tranciever, only a tranciever is needed on this since the ESP32 has a built in CAN controller.
+A short arduino script to control the Ford Focus MK3 Instrument Cluster {P/N:CM5T-10849-TU) with an ESP32-WROOM module with a SN65HVD230 CAN bus tranceiver. This can also be done with a lil bit different code on an Atmega328p/whatever else with a MCP2515 CAN controller and tranciever, only a tranciever is needed on this since the ESP32 has a built in CAN controller.
 I used a color LCD cluster but this should also work with the smaller and monochrome LCD cluster.
-
+CAN Speed is 125kbps and serial speed is 115200 baud
 # WHAT WORKS:
 - Speedometer
 - RPM
