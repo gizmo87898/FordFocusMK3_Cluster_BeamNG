@@ -1,0 +1,61 @@
+some barely legible notes i used as scrap paper during testing
+ford focus mk3 can ids
+id (in dec) - description
+
+58 (3a) - directionals
+64 (40) - airbag
+96 (60) - seatbelt light
+112 (70) - abs / trac ctrl
+128 (80) - parking lights, doors, cruise ctrl
+272 (110) - speed and rpm
+420 (1a4) - outside temp
+424 (1a8) - highbeam, orange foglight, hdc, brake light status
+432 (1b0)- foglight
+474 - 483 messages idk6
+560 (230) - tpms
+592 (250) - oil press. mil, backlight
+657 (291) - brake fluid messgae, trans overheat message, steering assist message
+768 (300) - trans malfunction, battery light
+800 (320) - made fuel gauge twitch
+864 (360) - eng temp
+1126 (466) - compass
+
+0x1a4
+outside temp combos
+ff ff 00 XX YY 00 ff 00 00
+
+XX YY
+19 00 = -40F
+21 00 = -40F
+
+21 60 = -40F
+
+21 90 = -18F
+
+21 FF = 32F
+22 00 = 32F
+
+22 FF = 147F
+
+23 00 = 147F
+
+23 FF = 187F
+
+
+0001 0110 = 22
+0001 0011 = 19
+0001 0111 = 23
+
+0x60 seatbelt light
+first byte 
+0bXXXX0000
+1111 = off
+1000 = off
+0001 = off
+0110 = blinks then stays on
+0100 = off
+0011 = off
+
+6-12 = on
+13 = off
+14-16 = on
