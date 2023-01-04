@@ -12,7 +12,7 @@ unsigned long sinceLast100msLoop = 0;
 unsigned long sinceLast200msLoop = 0;
 unsigned long sinceLast1000msLoop = 0;
 unsigned long sinceLast5sLoop = 0;
-int randomId = 90;
+int randomId = 65;
 int speed = 0;
 int rpm = 0;
 
@@ -52,13 +52,15 @@ void loop() {
     //Serial.println(data);
       
   }
-  if (currentLoop - sinceLast100msLoop > 100) {
+  if (currentLoop - sinceLast100msLoop > 50) {
     sinceLast100msLoop = currentLoop;
-    send20(); // Unknown
+    send3a(); // Directionals
     send40(); // Airbag
+    send60(); // Seatbelt light
     send70(); // ABS
     send80(); // Ignition Status
     send110(); // RPM and Speed
+    send1a4(); // Outside temp
     send230(); // TPMS
     send250(); // ECU
     send290(); // Error messages
@@ -66,6 +68,7 @@ void loop() {
     send300(); // Alternator light
     send360(); // Engine Temp
     sendRandom(); // Testing 
+    
     // RPM Needle sweeper
     if (rpm >= 8000) {
       rpmForward = false;
@@ -96,11 +99,12 @@ void loop() {
   }
   if (currentLoop - sinceLast5sLoop > 2000) {
     sinceLast5sLoop = currentLoop;
-    randomId = randomId+=1;
+    // randomId = randomId+=1;
+    randomId = random(4095);
   }
 }
-void send20() { // Dont really know what this does but it was in a log
-  CAN.beginPacket(0x020);
+void send3a() { // Directionals
+  CAN.beginPacket(0x03a);
   CAN.write(0x03);
   CAN.write(0xc1);
   CAN.write(0x01);
@@ -110,21 +114,37 @@ void send20() { // Dont really know what this does but it was in a log
   CAN.write(0xff);
   CAN.write(0xff);
   CAN.endPacket();
-  Serial.println("0x20 Sent");
+  Serial.println("0x3a Sent");
 }
-void send40() { // Airbag
+void send40() { // Airbag and odometer incrementer
     CAN.beginPacket(0x040);
-    CAN.write(0xFF);
-    CAN.write(0xFF);
-    CAN.write(0xFF);
-    CAN.write(0xff);
-    CAN.write(0xff);
-    CAN.write(0xff);
-    CAN.write(0xff);
-    CAN.write(0xff);
+
+    CAN.write(0);
+    CAN.write(random(255)); //odometer incrementer
+    CAN.write(random(255)); // airbag
+    CAN.write(random(255));
+    CAN.write(random(255));
+    CAN.write(random(255));
+    CAN.write(random(255));
+    CAN.write(random(255));
     CAN.endPacket();
     Serial.println("0x40 Sent");
 }
+void send60() { // Seatbelt
+    CAN.beginPacket(0x060);
+    CAN.write(0x60); // 0x60 for on 0xD0 for off
+    CAN.write(0);
+    CAN.write(0);
+    CAN.write(0);
+    CAN.write(0x00);
+    CAN.write(0x00);
+    CAN.write(0x00);
+    CAN.write(0x00);
+
+    CAN.endPacket();
+    Serial.println("0x60 Sent");
+}
+
 
 // 0x70
 // byte1 - tc status
@@ -178,7 +198,7 @@ void send80() { // Ignition Status
     CAN.endPacket();
     Serial.println("0x80 Sent");
 }
-void send110() {
+void send110() { // speed ad rpm
     CAN.beginPacket(0x110);
     CAN.write(0xFF);
     CAN.write(0xFF);
@@ -190,6 +210,19 @@ void send110() {
     CAN.write(lo8(speed)); // speed decimal ?
     CAN.endPacket();
     Serial.println("0x110 Sent");
+}
+void send1a4() { // outside temp
+    CAN.beginPacket(0x1a4);
+    CAN.write(0xFF);
+    CAN.write(0xFF);
+    CAN.write(0x00);
+    CAN.write(0x23); // temp
+    CAN.write(0xFF); // temp
+    CAN.write(0xFF);
+    CAN.write(0x00);
+    CAN.write(0x00);
+    CAN.endPacket();
+    Serial.println("0x1a4 Sent");
 }
 void send230() {
     CAN.beginPacket(0x230);
@@ -272,6 +305,7 @@ void send360() {
 }
 void sendRandom() {
     int randomData[] = {random(255),random(255),random(255),random(255),random(255),random(255),random(255),random(255)};
+    
     CAN.beginPacket(randomId);
     CAN.write(randomData[0]);
     CAN.write(randomData[1]);
