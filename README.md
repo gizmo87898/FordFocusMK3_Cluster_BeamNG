@@ -12,34 +12,21 @@ CAN Speed is 125kbps and serial speed is 115200 baud
 - TPMS Light
 - ABS Light
 - TC/TC Off Light
-- Directionals (not added yet)
-- Highbeam (not added yet)
+- Directionals
+- Highbeam
+- Fog Light
 - Cruise Control (somewhat)
 - Set Backlight Brightness
-
+- All red error messages gone
+- Outside Temp
+- Compass (not added yet)
 
 # WHAT DOES NOT WORK:
 - Brake Light
 - Glowplug Light
 - Auto Start/Stop Light
 - LDA Light
+- Some warnings still appear
+- Fuel Gauge
 
-# More IDs:
-These are IDs I found while bruteforcing random data.
-id (in dec) - description
-
-- 58 - directionals
-- 64 - airbag
-- 96 - seatbelt light
-- 112 - abs / trac ctrl
-- 128 - parking lights, doors, cruise ctrl
-- 272 - speed and rpm
-- 420 - outside temp
-- 424 - highbeam, orange foglight, hdc, brake light status
-- 432 - foglight
-- 560 - tpms
-- 592 - oil press. mil, backlight
-- 657 - brake fluid messgae, trans overheat message, steering assist message
-- 768 - trans malfunction, battery light
-- 800 - made fuel gauge twitch
-- 864 - eng temp
+More notes are in notes.txt
