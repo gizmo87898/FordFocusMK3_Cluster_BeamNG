@@ -20,6 +20,7 @@ CAN Speed is 125kbps and serial speed is 115200 baud
 - All red error messages gone
 - Outside Temp
 - Compass (not added yet)
+- Fuel Gauge
 
 # WHAT DOES NOT WORK:
 - Brake Light
@@ -27,6 +28,5 @@ CAN Speed is 125kbps and serial speed is 115200 baud
 - Auto Start/Stop Light
 - LDA Light
 - Some warnings still appear
-- Fuel Gauge
 
 More notes are in notes.txt
