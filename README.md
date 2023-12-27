@@ -1,32 +1,34 @@
 # Ford Focus MK3 Cluster Controller w/ ESP32
-A short arduino script to control the Ford Focus MK3 Instrument Cluster {P/N:CM5T-10849-TU) with an ESP32-WROOM module and an SN65HVD230 CAN bus tranceiver. This can also be done with a lil bit different code on an Atmega328p/whatever else with a MCP2515 CAN controller and tranciever, only a tranciever is needed on this since the ESP32 has a built in CAN controller.
+Scripts to control the Ford Focus MK3 Instrument Cluster {P/N:CM5T-10849-TU) with an ESP32-WROOM module and an SN65HVD230 CAN bus tranceiver or with any python-can compatible interface. 
 I used a color LCD cluster but this should also work with the smaller and monochrome LCD cluster.
 CAN Speed is 125kbps and serial speed is 115200 baud
 
+Arduino code will probably be missing features compared to the python one as i no longer have the hardware to test it
+
 # WHAT WORKS:
 - Speedometer
-- RPM
+- RPM (perfect)
+- All red error messages gone
+- Outside Temp
+
+# WHAT DOES NOT WORK:
+- red brake light always on
+- Glowplug Light
+- Auto Start/Stop Light
+- LDA Light
+- cant get rid of starter malfunction error
+
+# Found message ID, unknown bytes or i didnt implement it yet
+- Check Engine Light
+- Oil Pressure Light 
 - Engine Temp 
-- MIL (check engine light)
-- Oil Pressure Light
 - TPMS Light
 - ABS Light
 - TC/TC Off Light
 - Directionals
 - Highbeam
 - Fog Light
-- Cruise Control (somewhat)
+- Cruise Control
 - Set Backlight Brightness
-- All red error messages gone
-- Outside Temp
-- Compass (not added yet)
-- Fuel Gauge
-
-# WHAT DOES NOT WORK:
-- Brake Light
-- Glowplug Light
-- Auto Start/Stop Light
-- LDA Light
-- Some warnings still appear
 
 More notes are in notes.txt
