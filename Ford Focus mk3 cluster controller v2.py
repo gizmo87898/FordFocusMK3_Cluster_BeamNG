@@ -105,18 +105,3 @@ while True:
 
 sock.close()
 
-def connect_to_game_socket():
-    
-
-    while True:
-        global rpm
-        
-
-        if not data:
-            break 
-
-        
-    
-game_socket_thread = threading.Thread(target=connect_to_game_socket)
-game_socket_thread.start()
-game_socket_thread.join()
