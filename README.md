@@ -1,4 +1,4 @@
-# Ford Focus MK3 Cluster Controller w/ ESP32
+# Ford Focus MK3 Cluster Controller w/ ESP32 or python-can
 Scripts to control the Ford Focus MK3 Instrument Cluster {P/N:CM5T-10849-TU) with an ESP32-WROOM module and an SN65HVD230 CAN bus tranceiver or with any python-can compatible interface. 
 I used a color LCD cluster but this should also work with the smaller and monochrome LCD cluster.
 CAN Speed is 125kbps and serial speed is 115200 baud
