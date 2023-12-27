@@ -26,7 +26,8 @@ while True:
         data, _ = sock.recvfrom(256)
         packet = struct.unpack('I4sH2c7f2I3f16s16si', data)
         rpm = int(max(min(packet[6], 8000), 0))
-    
+        speed = max(min(int(packet[5]*3.6), 255), 0) #convert speed to km/h
+
     # Execute code every 100ms
     elapsed_time_100ms = current_time - start_time_100ms
     if elapsed_time_100ms >= 0.1:
@@ -83,8 +84,8 @@ while True:
     elapsed_time_10ms = current_time - start_time_10ms
     if elapsed_time_10ms >= 0.01:  # 10ms
         messages_10ms = [
-            can.Message(arbitration_id=0x110, data=[
-                0xff,0xff,0,0,(int(rpm/2))>>8,(int(rpm/2))&0xff,int((speed<<8)&0xff),int(speed)&0xff], is_extended_id=False),
+            can.Message(arbitration_id=0x110, data=[ 
+                0xff,0xff,0,0,(int(rpm/2))>>8,(int(rpm/2))&0xff,speed,0], is_extended_id=False),
             
             can.Message(arbitration_id=0x290, data=[
                 0xFF,0,0,0,0b10101010,0,0,0], is_extended_id=False),
@@ -93,7 +94,7 @@ while True:
         
         for message in messages_10ms:
             bus.send(message)
-            time.sleep(0.01)
+            time.sleep(0.008)
         start_time_10ms = time.time()
 
     # Execute code every 5s
