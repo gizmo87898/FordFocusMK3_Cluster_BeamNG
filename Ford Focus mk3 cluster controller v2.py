@@ -15,7 +15,7 @@ start_time_100ms = time.time()
 start_time_10ms = time.time()
 start_time_5s = time.time()
 
-id_counter = 0x0
+id_counter = 0x160
 
 rpm = 2000
 speed = 6108
@@ -64,7 +64,7 @@ while True:
                 0x00,0x95,0x04,0x82,0,0,0,0], is_extended_id=False),
             
             can.Message(arbitration_id=0x80, data=[ #Ignition, Doors, Parking Lights, Cruise Control
-                0x44,0b10000111,0x07,0b00000000,0,0b10101010,0,0], is_extended_id=False),
+                0x44,0b10000111,0x07,0x3e,0xd9,0x06,0,0], is_extended_id=False),
             
             can.Message(arbitration_id=0x1a4, data=[ # Outside Temp
                 0xff,0xff,0x00,0x22,0x50,0xff,0,0], is_extended_id=False),
@@ -106,7 +106,7 @@ while True:
         for message in messages_100ms:
             bus.send(message)
             #print(message)
-            wpt.sleep(0.005)
+            wpt.sleep(0.007)
         start_time_100ms = time.time()
 
 
@@ -120,14 +120,14 @@ while True:
             can.Message(arbitration_id=0x290, data=[
                 0xFF,0,0,0,0b10101010,0,0,0], is_extended_id=False),
             
-            can.Message(arbitration_id=0x20, data=[ # Directionals
-                1,1,1,0,0x81,0xff,0xff,random.randint(0,255)], is_extended_id=False),
+            can.Message(arbitration_id=0x20, data=[ # Gear
+                0x03,0xc1,0xff,random.randint(0,1)*16,0x81,0,0,0], is_extended_id=False),
             
         ]
         
         for message in messages_10ms:
             bus.send(message)
-            wpt.sleep(0.001)
+            wpt.sleep(0.007)
         start_time_10ms = time.time()
 
     # Execute code every 5s
